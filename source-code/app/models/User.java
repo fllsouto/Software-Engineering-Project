@@ -52,7 +52,7 @@ public class User extends Model {
     return username;
   }
 
-  public void set_username() {
+  public void set_username(String username) {
     this.username = username;
   }
 

@@ -1,12 +1,16 @@
 package unit_tests;
 
+import services.Tunnel;
+import models.User;
+import com.avaje.ebean.Model;
+
+import org.junit.Test;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.junit.*;
 
 import play.mvc.*;
 import play.test.*;
@@ -21,41 +25,26 @@ import play.twirl.api.Content;
 import static play.test.Helpers.*;
 import static org.junit.Assert.*;
 
-public class TunnelTest() {
+public class TunnelTest {
 
-  //trim_links
-  //Two cases : 
-  //  - original.contains("://")
-  //  - original.contains("www.")
-  // @test
+  @Test
+  public void testDig_1() {
+    //Regular user (not a member)
+    String result = new Tunnel().dig("https://www.playframework.com/documentation/2.4.x/JavaTest", "");
+    assertEquals(result.length(), 6);
+    assertTrue((result.charAt(0) >= (int)'0' && result.charAt(0) <= (int)'9') ||
+               (result.charAt(0) >= (int)'A' && result.charAt(0) <= (int)'Z') ||
+               (result.charAt(0) >= (int)'a' && result.charAt(0) <= (int)'z'));
 
-  //replace_by_value
-  //Three diffente cases only
+  }
 
-  //get_value
-  //Three diffente cases only
-
-  //to_number
-  //Just one case
-
-  //generate_shortened_url
-  //Try to test this method, but It could be hard because it have a random generator number
-
-  //insert_link
-  //Two cases : 
-  //  - generated is already on hash (if)
-  //  - generated is already on hash and time not over (if)
-  //  - generated is not on hash and a new key is created
-  // Verify in all the cases if the link is present on the hash
-
-  //end_point
-  //Just one case
-  
-  //have
-  //Just one case
-
-  //dig
-  //Two cases:
-  //  - Has user
-  //  - Dont have user
+  public void testDig_2() {
+    //With a user "test_user"
+    User u = new User(); u.set_username("testuser"); u.set_password("testuser"); u.save();
+    String result = new Tunnel().dig("https://www.playframework.com/documentation/2.4.x/JavaTest", "testuser");
+    assertEquals(result.length(), 6);
+    assertTrue((result.charAt(0) >= (int)'0' && result.charAt(0) <= (int)'9') ||
+              (result.charAt(0) >= (int)'A' && result.charAt(0) <= (int)'Z') ||
+              (result.charAt(0) >= (int)'a' && result.charAt(0) <= (int)'z'));
+  }
 }

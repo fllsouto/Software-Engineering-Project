@@ -25,10 +25,11 @@ public class Tunnel {
     generated = generate_shortened_url(original_link);
     /*If its a member...*/
     if(!user.isEmpty())
-      while(URL.already_generated(user, generated)) {
+    {
+      System.out.println("AUIQI " + user);
+      while(URL.already_generated(user, generated))
         generated = generate_shortened_url(generated);
-        System.out.println(generated);
-      }
+    }
     /*Otherwise*/
     else generated = insert_link(generated, original_link);
 
